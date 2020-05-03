@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import ReactDOM from 'react-dom'
 
 // Header comp.
@@ -8,7 +8,34 @@ const Header = ({text}) => <h1>{text}</h1>;
 const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</button>;
 
 // StatItem comp.
-const StatItem = ({item, value}) => <p>{item} {value}</p>;
+const StatItem = ({name, value}) => <p>{name} {value}</p>;
+
+// Statistics comp.
+const Statistics = (props) => {
+  const {
+    good, 
+    goodValue, 
+    neutral, 
+    neutralValue, 
+    bad, 
+    badValue, 
+    all, 
+    allValue, 
+    average, 
+    averageValue, 
+    positive, 
+    positiveValue} = props;
+  return (
+    <Fragment>
+      <StatItem name={good} value={goodValue} />
+      <StatItem name={neutral} value={neutralValue} />
+      <StatItem name={bad} value={badValue} />
+      <StatItem name={all} value={allValue} />
+      <StatItem name={average} value={averageValue} />
+      <StatItem name={positive} value={positiveValue} />
+    </Fragment>
+  )
+};
 
 const App = () => {
   // save clicks of each button to own state
@@ -35,16 +62,25 @@ const App = () => {
       <Button handleClick={onNeutralClick} text="neutral" />
       <Button handleClick={onBadClick} text="bad" />
       <h2>Statistics</h2>
-      <StatItem item="good" value={good} />
-      <StatItem item="neutral" value={neutral} />
-      <StatItem item="bad" value={bad} />
-      <StatItem item="all" value={total} />
-      <StatItem item="average" value={(total) / 3} />
-      <StatItem item="positive" value={`${((good/total) * 100)} %`} />
+      <Statistics 
+        good="good"
+        goodValue={good}
+        neutral="neutral"
+        neutralValue={neutral}
+        bad="bad"
+        badValue={bad}
+        all="all"
+        allValue={total}
+        average="average"
+        averageValue={(total) / 3}
+        positive="positive"
+        positiveValue={`${((good/total) * 100)} %`}
+      />
     </div>
   )
 }
 
 ReactDOM.render(<App />, 
   document.getElementById('root')
-)
+);
+
