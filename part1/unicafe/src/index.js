@@ -62,20 +62,22 @@ const App = () => {
       <Button handleClick={onNeutralClick} text="neutral" />
       <Button handleClick={onBadClick} text="bad" />
       <h2>Statistics</h2>
-      <Statistics 
-        good="good"
-        goodValue={good}
-        neutral="neutral"
-        neutralValue={neutral}
-        bad="bad"
-        badValue={bad}
-        all="all"
-        allValue={total}
-        average="average"
-        averageValue={(total) / 3}
-        positive="positive"
-        positiveValue={`${((good/total) * 100)} %`}
-      />
+      {good === 0 && neutral === 0 && bad === 0 ? <p>No feedback given</p> : 
+        <Statistics 
+          good="good"
+          goodValue={good}
+          neutral="neutral"
+          neutralValue={neutral}
+          bad="bad"
+          badValue={bad}
+          all="all"
+          allValue={total}
+          average="average"
+          averageValue={(total) / 3}
+          positive="positive"
+          positiveValue={`${((good/total) * 100)} %`}
+        />
+      }
     </div>
   )
 }
