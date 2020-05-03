@@ -11,29 +11,9 @@ const Button = ({text, handleClick}) => <button onClick={handleClick}>{text}</bu
 const StatItem = ({name, value}) => <p>{name} {value}</p>;
 
 // Statistics comp.
-const Statistics = (props) => {
-  const {
-    good, 
-    goodValue, 
-    neutral, 
-    neutralValue, 
-    bad, 
-    badValue, 
-    all, 
-    allValue, 
-    average, 
-    averageValue, 
-    positive, 
-    positiveValue} = props;
+const Statistic = ({name, value}) => {
   return (
-    <Fragment>
-      <StatItem name={good} value={goodValue} />
-      <StatItem name={neutral} value={neutralValue} />
-      <StatItem name={bad} value={badValue} />
-      <StatItem name={all} value={allValue} />
-      <StatItem name={average} value={averageValue} />
-      <StatItem name={positive} value={positiveValue} />
-    </Fragment>
+      <StatItem name={name} value={value} />
   )
 };
 
@@ -63,20 +43,14 @@ const App = () => {
       <Button handleClick={onBadClick} text="bad" />
       <h2>Statistics</h2>
       {good === 0 && neutral === 0 && bad === 0 ? <p>No feedback given</p> : 
-        <Statistics 
-          good="good"
-          goodValue={good}
-          neutral="neutral"
-          neutralValue={neutral}
-          bad="bad"
-          badValue={bad}
-          all="all"
-          allValue={total}
-          average="average"
-          averageValue={(total) / 3}
-          positive="positive"
-          positiveValue={`${((good/total) * 100)} %`}
-        />
+        <Fragment>
+          <Statistic name="good" value={good} />
+          <Statistic name="bad" value={bad} />
+          <Statistic name="neutral" value={neutral} />
+          <Statistic name="all" value={total} />
+          <Statistic name="average" value={total / 3} />
+          <Statistic name="positive" value={(good / total) * 100} />
+        </Fragment>
       }
     </div>
   )
