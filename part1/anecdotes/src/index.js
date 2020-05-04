@@ -1,9 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import ReactDOM from 'react-dom'
 
 
 // Button comp.
 const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>;
+
+// MostVotes comp.
+const AnecdoteDetails = ({text, votes}) => (
+  <Fragment>
+    <p>{text}</p>
+    <p>{`has ${votes} votes`}</p>
+  </Fragment>
+);
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
@@ -14,7 +22,6 @@ const App = (props) => {
     let randomSel = Math.floor(Math.random() * anecdotes.length);
     // Update selected app state value to generated random number.
     setSelected(randomSel)
-    console.log(selected)
   };
 
   const updateVotes = () => {
@@ -26,12 +33,25 @@ const App = (props) => {
     setVotes(newVotes)
   };
 
+  // Find index of votes array element with highest value.
+  const indexOfMaxValue = votes.indexOf(Math.max(...votes));
+
   return (
     <div>
-      <p>{props.anecdotes[selected]}</p>
-      <p>{`has ${votes[selected]} votes`}</p>
+      <h1>Anecdote of the day</h1>
+      <AnecdoteDetails 
+        text={anecdotes[selected]}
+        votes={votes[selected]}
+      />
       <Button text="vote" handleClick={updateVotes} />
       <Button text="next anecdote" handleClick={selectRandom} />
+      <h2>Anecdote with most votes</h2>
+      {votes[indexOfMaxValue] <= 0 ? <p>No anecdotes have been voted on as yet</p> :
+        <AnecdoteDetails 
+          text={anecdotes[indexOfMaxValue]}
+          votes={votes[indexOfMaxValue]}
+        />
+      }
     </div>
   )
 }
