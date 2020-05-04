@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom'
 
 
 // Button comp.
-const Button = ({handleClick}) => <button onClick={handleClick}>next anecdote</button>;
+const Button = ({handleClick, text}) => <button onClick={handleClick}>{text}</button>;
 
 const App = (props) => {
-  const [selected, setSelected] = useState(0)
+  const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(Array.apply(null, new Array(anecdotes.length)).map(Number.prototype.valueOf,0));
 
   const selectRandom = () => {
     // Generate random number between 0 and one less then length of anecdotes array
@@ -16,10 +17,21 @@ const App = (props) => {
     console.log(selected)
   };
 
+  const updateVotes = () => {
+    // Return new array which includes all elements from old array.
+    const newVotes = [...votes];
+    // Increase value of currently select anecdote array element by 1.
+    newVotes[selected] += 1;
+    // Update votes piece of state.
+    setVotes(newVotes)
+  };
+
   return (
     <div>
       <p>{props.anecdotes[selected]}</p>
-      <Button handleClick={selectRandom} />
+      <p>{`has ${votes[selected]} votes`}</p>
+      <Button text="vote" handleClick={updateVotes} />
+      <Button text="next anecdote" handleClick={selectRandom} />
     </div>
   )
 }
