@@ -13,10 +13,24 @@ const App = () => {
 
   const formSubmit = (evt) => {
     evt.preventDefault();
+    // Create a new persons array with every user name in uppercase characters.
+    const personsArray = persons.map(person => person.name.toUpperCase());
+    const newNameUpper = newName.toUpperCase();
+    console.log('newName', newNameUpper)
+    console.log('Array', personsArray)
+
+    console.log(personsArray.includes(newNameUpper))
+    // Create newPerson object to be added to persons array piece of component state.
     const newPerson = {
       name: newName
+    };
+    // Check whether persons array already contains the name of user attempting to be added.
+    if(personsArray.includes(newNameUpper)) {
+      alert(`${newName} is already added to the phonebook.`);
+    } else {
+      setPersons(persons.concat(newPerson));
     }
-    setPersons(persons.concat(newPerson));
+    // Reset input field value to an empty string.
     setNewName('');
   }
 
