@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import SearchFilter from './components/SearchFilter';
+import Persons from './components/Persons';
+import AddPerson from './components/AddPerson';
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -7,6 +10,7 @@ const App = () => {
     { name: 'Dan Abramov', number: '12-43-234345' },
     { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]) 
+  // COMPONENT STATE.
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ searchTerm, setSearchTerm ] = useState('');
@@ -26,7 +30,6 @@ const App = () => {
   const searchTermUpdate = (evt) => {
     const searchTerm = evt.target.value.trimStart();
     setSearchTerm(searchTerm);
-
     // Create a new persons array with every person's name in uppercase characters.
     const personsArray = persons.map(person => {
       return {
@@ -34,19 +37,11 @@ const App = () => {
         number: person.number
       }
     });
-
     // Convert searchTerm piece of state to uppercase.
     const searchUpper = searchTerm.toUpperCase();
     // set filteredPersons to array of elements that match the search term.
     const newFilteredArray = personsArray.filter(person => person.name === searchUpper);
-    console.log('FILTRERED', newFilteredArray)
-    console.log(searchUpper)
-    console.log('PERSONS', personsArray)
     setFilteredPersons(newFilteredArray.length > 0 ? newFilteredArray : []);
-
-
-    
-
   };
 
   const formSubmit = (evt) => {
@@ -73,41 +68,22 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <label htmlFor="search">{`Filter shown with  `}</label>
-      <input 
-        type="text"
-        placeholder="enter search term"
-        value={searchTerm}
-        onChange={searchTermUpdate}
-        id="search"
-      />
+      <SearchFilter searchTerm={searchTerm} searchTermUpdate={searchTermUpdate} />
       <h2>add a new</h2>
-      <form onSubmit={formSubmit}>
-        <div>
-          name: <input 
-            type="text"
-            placeholder="Please enter name"
-            value={newName} 
-            onChange={nameChange}
-          />
-        </div>
-        <div>
-          number: <input 
-            type="tel"
-            placeholder="Please enter phone #"
-            value={newNumber} 
-            onChange={numberChange}
-          />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <AddPerson 
+        newName={newName}
+        nameChange={nameChange}
+        formSubmit={formSubmit}
+        newNumber={newNumber}
+        numberChange={numberChange}
+      />
       <h2>Numbers</h2>
-      {filteredPersons.length <= 0 ? persons.map(person => <p key={person.name}>{person.name} {person.number}</p>) : 
-      filteredPersons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      <Persons 
+        persons={persons} 
+        filteredPersons={filteredPersons} 
+      />
     </div>
   )
-}
+};
 
 export default App;
