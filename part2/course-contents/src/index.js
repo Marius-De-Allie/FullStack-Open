@@ -8,6 +8,7 @@ const Header = ({ course }) => {
 }
 
 const Total = ({ course }) => {
+  // Calculate sum of exercises using the Array reduce method.
   const sum = course.parts.reduce((total, part) => total += part.exercises, 0)
   return(
     <p>Number of exercises {sum}</p>
