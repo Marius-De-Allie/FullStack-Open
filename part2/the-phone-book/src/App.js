@@ -2,10 +2,16 @@ import React, { useState } from 'react';
 
 const App = () => {
   const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '905-467-9546' }
+    { name: 'Arto Hellas', number: '040-123456' },
+    { name: 'Ada Lovelace', number: '39-44-5323523' },
+    { name: 'Dan Abramov', number: '12-43-234345' },
+    { name: 'Mary Poppendieck', number: '39-23-6423122' }
   ]) 
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
+  const [ searchTerm, setSearchTerm ] = useState('');
+  const [ filteredPersons, setFilteredPersons ] = useState([]);
+
 
   const nameChange = (evt) => {
     const value = evt.target.value.trimStart();
@@ -16,6 +22,32 @@ const App = () => {
     const number = evt.target.value.trimStart();
     setNewNumber(number);
   }
+
+  const searchTermUpdate = (evt) => {
+    const searchTerm = evt.target.value.trimStart();
+    setSearchTerm(searchTerm);
+
+    // Create a new persons array with every person's name in uppercase characters.
+    const personsArray = persons.map(person => {
+      return {
+        name: person.name.toUpperCase(),
+        number: person.number
+      }
+    });
+
+    // Convert searchTerm piece of state to uppercase.
+    const searchUpper = searchTerm.toUpperCase();
+    // set filteredPersons to array of elements that match the search term.
+    const newFilteredArray = personsArray.filter(person => person.name === searchUpper);
+    console.log('FILTRERED', newFilteredArray)
+    console.log(searchUpper)
+    console.log('PERSONS', personsArray)
+    setFilteredPersons(newFilteredArray.length > 0 ? newFilteredArray : []);
+
+
+    
+
+  };
 
   const formSubmit = (evt) => {
     evt.preventDefault();
@@ -40,7 +72,16 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <label htmlFor="search">{`Filter shown with  `}</label>
+      <input 
+        type="text"
+        placeholder="enter search term"
+        value={searchTerm}
+        onChange={searchTermUpdate}
+        id="search"
+      />
+      <h2>add a new</h2>
       <form onSubmit={formSubmit}>
         <div>
           name: <input 
@@ -63,7 +104,8 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      {persons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      {filteredPersons.length <= 0 ? persons.map(person => <p key={person.name}>{person.name} {person.number}</p>) : 
+      filteredPersons.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
     </div>
   )
 }
