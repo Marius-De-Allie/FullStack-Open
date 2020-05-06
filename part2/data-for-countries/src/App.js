@@ -25,23 +25,25 @@ const App = () => {
     term = new RegExp(term, 'i');
     const results = countries.filter(country => country.name.match(term));
     setFilteredCountries(results);
-  }
+  };
+
   const renderUI = () => {
-    if(searchTerm !== '') {
       if(filteredCountries.length > 10) {
         return <p>Too many matches specify another filter</p>
   
       } else if(filteredCountries.length > 1) {
-        return <CountryList countries={filteredCountries} />
+        return <CountryList countries={filteredCountries} show={showCountry} />
       } else if(filteredCountries.length === 1) {
         return filteredCountries.map(country => <CountryDetails key={country.numericCode} country={country} />)
       }
-    } else {
-      return undefined;
-    }
+   
   };
 
-
+  const showCountry = (countryCode) => {
+    const result = filteredCountries.filter(country => country.numericCode === countryCode);
+    setFilteredCountries(result);
+    setSearchTerm('');
+  };
 
   return (
     <div>
