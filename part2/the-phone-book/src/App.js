@@ -49,16 +49,48 @@ const App = () => {
   const formSubmit = (evt) => {
     evt.preventDefault();
     // Create a new persons array with every user name in uppercase characters.
-    const personsArray = persons.map(person => person.name.toUpperCase());
+    const personsArray = persons.map(person => {
+      let newPerson;
+      newPerson = {
+        ...person,
+        name: person.name.toUpperCase()
+      }
+      return newPerson;
+    });
     const newNameUpper = newName.toUpperCase();
+    const matchingPersons = personsArray.filter(person => person.name === newNameUpper);
+    const match = matchingPersons.map(per => per.name);
+    console.log(personsArray);
+    console.log(matchingPersons);
+    console.log(match)
     // Create newPerson object to be added to persons array piece of component state.
     const newPerson = {
       name: newName,
       number: newNumber
     };
     // Check whether persons array already contains the name of user attempting to be added.
-    if(personsArray.includes(newNameUpper)) {
-      alert(`${newName} is already added to the phonebook.`);
+    if(match.includes(newNameUpper)) {
+      // Check whether newly added person's number value is not an empty string.
+      if(newPerson.number !== '') {
+        // If number is not an empty string then confirm updating person's number.
+        if(window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+          const selected = personsArray.find(person => person.name === newNameUpper);
+          const selectedPerson = persons.find(person => person.id === selected.id);
+          // Selected Person's id property.
+          const id = selectedPerson.id;
+          // Update person's object, overwriting the number property on the object.
+          const updatedPerson = {...selectedPerson, number: newPerson.number};
+          personService.updateNumber(id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(per => per.id === id ? returnedPerson : per))
+          })
+        } else {
+          // DO nothing.
+        }
+      } else {
+        alert(`Sorry ${newPerson.name} has already been added to the phonebook!`);
+      }
+      // const per = personsArray.find(per => per.name === newNameUpper);
     } else {
       personService.create(newPerson)
       .then(returnedPerson => {
