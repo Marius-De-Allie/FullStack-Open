@@ -29,6 +29,11 @@
       "name": "Jane Doe",
       "number": "416-867-7643",
       "id": 6
+    },
+    {
+      "name": "Mary Brown",
+      "number": "647-876-6534",
+      "id": 7
     }
   ]
 }
