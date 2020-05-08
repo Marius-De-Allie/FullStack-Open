@@ -71,6 +71,19 @@ const App = () => {
     setNewNumber('');
   }
 
+  const deletePerson = (personId) => {
+    const personToDel = persons.find(person => person.id === personId);
+    if(window.confirm(`Delete ${personToDel.name}?`)) {
+      personService.deleteItem(personId)
+      .then(returnedPerson => {
+        setPersons(persons.filter(person => person.id !== personId))
+      })
+      .catch(e => alert(`Unable to delete ${personToDel.name}.`))
+    } else {
+      //  do nothing.
+    }
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -87,6 +100,7 @@ const App = () => {
       <Persons 
         persons={persons} 
         filteredPersons={filteredPersons} 
+        handleDelete={deletePerson}
       />
     </div>
   )
