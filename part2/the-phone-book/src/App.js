@@ -3,6 +3,7 @@ import SearchFilter from './components/SearchFilter';
 import Persons from './components/Persons';
 import AddPerson from './components/AddPerson';
 import personService from './services/persons';
+import Notification from './components/Notification';
 
 const App = () => {
   // COMPONENT STATE.
@@ -11,6 +12,7 @@ const App = () => {
   const [ newNumber, setNewNumber ] = useState('');
   const [ searchTerm, setSearchTerm ] = useState('');
   const [ filteredPersons, setFilteredPersons ] = useState([]);
+  const [message, setMessage] = useState(null);
 
   useEffect(() => {
     personService.getAll()
@@ -83,6 +85,10 @@ const App = () => {
           personService.updateNumber(id, updatedPerson)
           .then(returnedPerson => {
             setPersons(persons.map(per => per.id === id ? returnedPerson : per))
+            setMessage(`Added phone number for ${returnedPerson.name}`);
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000)
           })
         } else {
           // DO nothing.
@@ -95,6 +101,10 @@ const App = () => {
       personService.create(newPerson)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setMessage(`Added ${returnedPerson.name}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000)
       })
       .catch(e => alert('Unable to complete request, please try again!'))
     }
@@ -109,6 +119,12 @@ const App = () => {
       personService.deleteItem(personId)
       .then(returnedPerson => {
         setPersons(persons.filter(person => person.id !== personId))
+        setMessage(`Deleted ${returnedPerson.name}`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000)
+
+        
       })
       .catch(e => alert(`Unable to delete ${personToDel.name}.`))
     } else {
@@ -118,6 +134,7 @@ const App = () => {
 
   return (
     <div>
+      <Notification message={message} />
       <h1>Phonebook</h1>
       <SearchFilter searchTerm={searchTerm} searchTermUpdate={searchTermUpdate} />
       <h2>add a new</h2>
