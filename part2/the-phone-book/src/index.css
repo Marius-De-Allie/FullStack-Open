@@ -21,3 +21,14 @@ div.message {
   border: 1px solid black;
   margin: 5px 15px;
 }
+
+div.error {
+  color: red;
+  background-color: black;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: 3px solid red;
+  margin: 5px 15px;
+  text-align: center;
+}

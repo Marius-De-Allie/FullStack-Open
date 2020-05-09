@@ -4,6 +4,7 @@ import Persons from './components/Persons';
 import AddPerson from './components/AddPerson';
 import personService from './services/persons';
 import Notification from './components/Notification';
+import ErrorNotification from './components/ErrorNotification';
 
 const App = () => {
   // COMPONENT STATE.
@@ -13,6 +14,7 @@ const App = () => {
   const [ searchTerm, setSearchTerm ] = useState('');
   const [ filteredPersons, setFilteredPersons ] = useState([]);
   const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     personService.getAll()
@@ -90,6 +92,13 @@ const App = () => {
               setMessage(null);
             }, 5000)
           })
+          .catch(e => {
+            setError(`Cannot add phone number since ${updatedPerson.name} has already been deleted from server.`);
+            setPersons(persons.filter(person => person.id !== updatedPerson.id));
+            setTimeout(() => {
+              setError(null);
+            }, 5000)
+          })
         } else {
           // DO nothing.
         }
@@ -123,10 +132,14 @@ const App = () => {
         setTimeout(() => {
           setMessage(null);
         }, 5000)
-
-        
       })
-      .catch(e => alert(`Unable to delete ${personToDel.name}.`))
+      .catch(e => {
+        setError(`${personToDel.name} has already been removed from server.`);
+        setPersons(persons.filter(person => person.id !== personToDel.id));
+        setTimeout(() => {
+          setError(null);
+        }, 5000)
+      });
     } else {
       //  do nothing.
     }
@@ -135,6 +148,7 @@ const App = () => {
   return (
     <div>
       <Notification message={message} />
+      {error !== null && <ErrorNotification message={error} />}
       <h1>Phonebook</h1>
       <SearchFilter searchTerm={searchTerm} searchTermUpdate={searchTermUpdate} />
       <h2>add a new</h2>
