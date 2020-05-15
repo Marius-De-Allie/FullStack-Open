@@ -64,58 +64,53 @@ const App = () => {
     const newNameUpper = newName.toUpperCase();
     const matchingPersons = personsArray.filter(person => person.name === newNameUpper);
     const match = matchingPersons.map(per => per.name);
-    console.log(personsArray);
-    console.log(matchingPersons);
-    console.log(match)
     // Create newPerson object to be added to persons array piece of component state.
     const newPerson = {
       name: newName,
       number: newNumber
     };
-    // Check whether persons array already contains the name of user attempting to be added.
-    if(match.includes(newNameUpper)) {
-      // Check whether newly added person's number value is not an empty string.
-      if(newPerson.number !== '') {
-        // If number is not an empty string then confirm updating person's number.
-        if(window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+
+    if(match.includes(newNameUpper) && newNumber !== '') {
           const selected = personsArray.find(person => person.name === newNameUpper);
           const selectedPerson = persons.find(person => person.id === selected.id);
-          // Selected Person's id property.
+    //       // Selected Person's id property.
           const id = selectedPerson.id;
-          // Update person's object, overwriting the number property on the object.
+    //       // Update person's object, overwriting the number property on the object.
           const updatedPerson = {...selectedPerson, number: newPerson.number};
           personService.updateNumber(id, updatedPerson)
           .then(returnedPerson => {
-            setPersons(persons.map(per => per.id === id ? returnedPerson : per))
-            setMessage(`Added phone number for ${returnedPerson.name}`);
-            setTimeout(() => {
-              setMessage(null);
-            }, 5000)
+            if(window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+              setPersons(persons.map(per => per.id === id ? returnedPerson : per))
+              setMessage(`Added phone number for ${returnedPerson.name}`);
+              setTimeout(() => {
+                setMessage(null);
+              }, 5000)
+            } else {
+              // Do nothing.
+            }
           })
           .catch(e => {
-            setError(`Cannot add phone number since ${updatedPerson.name} has already been deleted from server.`);
-            setPersons(persons.filter(person => person.id !== updatedPerson.id));
+            setError(e.response.data.error);
             setTimeout(() => {
               setError(null);
             }, 5000)
           })
-        } else {
-          // DO nothing.
-        }
       } else {
-        alert(`Sorry ${newPerson.name} has already been added to the phonebook!`);
-      }
-      // const per = personsArray.find(per => per.name === newNameUpper);
-    } else {
-      personService.create(newPerson)
-      .then(returnedPerson => {
-        setPersons(persons.concat(returnedPerson))
-        setMessage(`Added ${returnedPerson.name}`);
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000)
-      })
-      .catch(e => alert('Unable to complete request, please try again!'))
+        personService.create(newPerson)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setMessage(`Added ${returnedPerson.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000)
+        })
+        .catch(e => {
+          setError(e.response.data.error);
+          setTimeout(() => {
+            setError(null);
+          }, 5000)
+        })
+
     }
     // Reset both input fields value to an empty string.
     setNewName('');
@@ -128,7 +123,7 @@ const App = () => {
       personService.deleteItem(personId)
       .then(returnedPerson => {
         setPersons(persons.filter(person => person.id !== personId))
-        setMessage(`Deleted ${returnedPerson.name}`);
+        setMessage('Deleted ' + personToDel.name);
         setTimeout(() => {
           setMessage(null);
         }, 5000)
@@ -170,3 +165,57 @@ const App = () => {
 };
 
 export default App;
+
+
+    // // Check whether persons array already contains the name of user attempting to be added.
+    // if(match.includes(newNameUpper)) {
+    //   // Check whether newly added person's number value is not an empty string.
+    //   if(newPerson.number !== '') {
+    //     // If number is not an empty string then confirm updating person's number.
+    //     if(window.confirm(`${newPerson.name} is already added to the phonebook, replace the old number with a new one?`)) {
+    //       const selected = personsArray.find(person => person.name === newNameUpper);
+    //       const selectedPerson = persons.find(person => person.id === selected.id);
+    //       // Selected Person's id property.
+    //       const id = selectedPerson.id;
+    //       // Update person's object, overwriting the number property on the object.
+    //       const updatedPerson = {...selectedPerson, number: newPerson.number};
+    //       personService.updateNumber(id, updatedPerson)
+    //       .then(returnedPerson => {
+    //         setPersons(persons.map(per => per.id === id ? returnedPerson : per))
+    //         setMessage(`Added phone number for ${returnedPerson.name}`);
+    //         setTimeout(() => {
+    //           setMessage(null);
+    //         }, 5000)
+    //       })
+    //       .catch(e => {
+    //         setError(`Cannot add phone number since ${updatedPerson.name} has already been deleted from server.`);
+    //         setPersons(persons.filter(person => person.id !== updatedPerson.id));
+    //         setTimeout(() => {
+    //           setError(null);
+    //         }, 5000)
+    //       })
+    //     } else {
+    //       // DO nothing.
+    //     }
+    //   } else {
+    //     alert(`Sorry ${newPerson.name} has already been added to the phonebook!`);
+    //   }
+    //   // const per = personsArray.find(per => per.name === newNameUpper);
+    // } else {
+    //   personService.create(newPerson)
+    //   .then(returnedPerson => {
+    //     // setPersons(persons.concat(returnedPerson))
+    //     setMessage(`Added ${returnedPerson.name}`);
+    //     setTimeout(() => {
+    //       setMessage(null);
+    //     }, 5000)
+    //   })
+    //   .catch(e => {
+    //     console.log(e.response.data.error);
+    //     setError(e.response.data.error);
+    //     setTimeout(() => {
+    //       setError(null);
+    //     }, 5000)
+    //   })
+    //     // alert('Unable to complete request, please try again!'))
+    // }
