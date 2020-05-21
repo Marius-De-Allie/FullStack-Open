@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import AddBlog from './components/AddBlog';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -9,12 +10,16 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
+  const [key, setKey] = useState(0)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, []);
+  }, [key]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -82,9 +87,43 @@ const App = () => {
     </div>
   );
 
+  const handleTitleChange = (evt) => {
+    setTitle(evt.target.value)
+  };
+  const handleAuthorChange = (evt) => {
+    setAuthor(evt.target.value)
+  };
+  const handleUrlChange = (evt) => {
+    setUrl(evt.target.value)
+  };
+
+
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null);
+  }
+
+  const handleCreate = async evt => {
+    evt.preventDefault();
+    const blogObj = {
+      title,
+      author,
+      url
+    }
+
+    console.log(blogObj)
+    try {
+      await blogService.create(blogObj)
+      // Update key peice of component state to force app component to rerender when new blog is added.
+      setKey(Math.random() * 10)
+    } catch(e) {
+      console.log(e)
+    }
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+
+
   }
 
   const BlogList = () => (
@@ -103,8 +142,16 @@ const App = () => {
   return (
     <div>
       {user === null ? <LoginForm /> : <BlogList />}
-      
-     
+      {user !== null &&<AddBlog
+        title={title}
+        author={author}
+        url={url}
+        handleTitleChange={handleTitleChange}
+        handleAuthorChange={handleAuthorChange}
+        handleUrlChange={handleUrlChange}
+        handleCreate={handleCreate}
+      />
+    }
     </div>
   )
 }
