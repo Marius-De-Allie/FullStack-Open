@@ -36,3 +36,27 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* Error message styling */
+
+p.error {
+  color: orange;
+  text-align: center;
+  font-weight: bold;
+  background-color: gray;
+  padding: 10px;
+  border: 3px solid orange;
+  border-radius: 5px;
+}
+/* Notification message styling */
+
+p.notification {
+  color: greenyellow;
+  text-align: center;
+  font-weight: bold;
+  background-color: gray;
+  padding: 10px;
+  border: 3px solid greenyellow;
+  border-radius: 5px;
+}

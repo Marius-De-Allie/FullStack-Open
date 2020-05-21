@@ -16,7 +16,7 @@ const AddBlog = (props) => (
           <label htmlFor="url">url</label>
           <input type="text" value={props.url} id="url" onChange={props.handleUrlChange}/>
         </div>
-          <button type="submit">create</button>
+          <button type="submit" disabled={props.title === '' || props.author === '' || props.url === ''}>create</button>
         </form>
     </div>
 );

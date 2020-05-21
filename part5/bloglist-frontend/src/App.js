@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import AddBlog from './components/AddBlog';
+import './App.css';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -10,10 +11,11 @@ const App = () => {
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [notifMessage, setNotifMessage] = useState(null);
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
-  const [key, setKey] = useState(0)
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,7 +44,10 @@ const App = () => {
     evt.preventDefault();
     try {
       const user = await loginService({username, password});
-
+      setNotifMessage(`${user.name} succesfully logged in!`);
+      setTimeout(() => {
+        setNotifMessage(null)
+      }, 5000)
       // Add logged in user data to localStorage.
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
 
@@ -51,7 +56,7 @@ const App = () => {
       setUsername('');
       setPassword('');
     } catch(exception) {
-      setErrorMessage('Wrong credentials')
+      setErrorMessage('Incorrect username or password')
       setTimeout(() => {
         setErrorMessage(null)
       } , 5000)
@@ -101,6 +106,10 @@ const App = () => {
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null);
+    setNotifMessage(`Successfully logged out`);
+      setTimeout(() => {
+        setNotifMessage(null)
+      }, 5000)
   }
 
   const handleCreate = async evt => {
@@ -113,11 +122,19 @@ const App = () => {
 
     console.log(blogObj)
     try {
-      await blogService.create(blogObj)
+      const response = await blogService.create(blogObj)
       // Update key peice of component state to force app component to rerender when new blog is added.
-      setKey(Math.random() * 10)
+      setKey(Math.random() * 10);
+      setNotifMessage(`New blog: ${response.title} added by ${response.author}!`);
+      setTimeout(() => {
+        setNotifMessage(null)
+      }, 5000)
     } catch(e) {
       console.log(e)
+      setErrorMessage(`Unable to add blog post please try again`);
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
     }
     setTitle('')
     setAuthor('')
@@ -128,9 +145,8 @@ const App = () => {
 
   const BlogList = () => (
     <div>
-      {errorMessage === null && <p>{errorMessage}</p>}
       <h2>blogs</h2>
-      {JSON.stringify(user.token)}
+      {/* {JSON.stringify(user.token)} */}
       <h3>{`${user.name} logged in`}</h3>
       <button onClick={handleLogout}>logout</button>
       {blogs.map(blog =>
@@ -141,6 +157,8 @@ const App = () => {
 
   return (
     <div>
+      {errorMessage !== null && <p className="error">{errorMessage}</p>}
+      {notifMessage !== null && <p className="notification">{notifMessage}</p>}
       {user === null ? <LoginForm /> : <BlogList />}
       {user !== null &&<AddBlog
         title={title}
