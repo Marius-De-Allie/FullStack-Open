@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import blogService from '../services/blogs';
+// Import PropTypes
+import PropTypes from 'prop-types';
 
 const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
 
@@ -39,8 +41,10 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
       ...blogObj,
       likes: blogObj.likes + 1
     };
+    console.log(updatedBlog)
     try {
       const response = await blogService.updateLikes(blog.id, updatedBlog);
+      console.log(response)
       setBlogs(blogs.map(blog => {
         return blog.id === response.id ? response : blog
       }))
@@ -82,6 +86,15 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
     </div>
   )
 };
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired, 
+  blogs: PropTypes.array.isRequired, 
+  setBlogs: PropTypes.func.isRequired, 
+  error: PropTypes.func.isRequired, 
+  handleDelete: PropTypes.func.isRequired, 
+  user: PropTypes.object.isRequired
+}
 
 
 export default Blog
