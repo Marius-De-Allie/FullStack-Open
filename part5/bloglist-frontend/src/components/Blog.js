@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import blogService from '../services/blogs';
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, blogs, setBlogs, error }) => {
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -24,6 +25,34 @@ const Blog = ({ blog }) => {
     setShowDetails(!showDetails)
   };
 
+  const handleLike = async () => {
+
+    const blogObj = {
+      title: blog.title,
+      author: blog.author,
+      url: blog.url,
+      user: blog.user,
+      likes: blog.likes
+    };
+
+    const updatedBlog = {
+      ...blogObj,
+      likes: blogObj.likes + 1
+    };
+    try {
+      const response = await blogService.updateLikes(blog.id, updatedBlog);
+      setBlogs(blogs.map(blog => {
+        return blog.id === response.id ? response : blog
+      }))
+
+    } catch(e) {
+      error('Sorry unable to update blog likes value');
+      setTimeout(() => {
+        error(null)
+      }, 5000)
+    }
+  }
+
   return (
     <div style={styles.blogItem}>
       <div style={{padding: '5px'}}>
@@ -42,7 +71,7 @@ const Blog = ({ blog }) => {
         }
         <div style={{display: showDetails ? '' : 'none'}}>
           <p>{blog.url}</p>
-          <p>{`liks: ${blog.likes}`} <button onClick={() => console.log('liked')}>like</button></p>
+          <p>{`liks: ${blog.likes}`} <button onClick={handleLike}>like</button></p>
         </div>
       </div>
     </div>

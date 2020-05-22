@@ -138,6 +138,8 @@ const App = () => {
           addBlogVisible={addBlogVisible}
           show={() => handleAddBlogVisible(true)}
           hide={() => handleAddBlogVisible(false)}
+          setBlogs={setBlogs}
+          error={setErrorMessage}
         />}
     </div>
   )
