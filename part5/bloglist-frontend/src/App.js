@@ -15,7 +15,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, []);
 
   useEffect(() => {
@@ -50,21 +50,21 @@ const App = () => {
     }
   };
 
-  
+
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null);
-    setNotifMessage(`Successfully logged out`);
-      setTimeout(() => {
-        setNotifMessage(null)
-      }, 5000)
-      setaddBlogVisible(false);
+    setNotifMessage('Successfully logged out');
+    setTimeout(() => {
+      setNotifMessage(null)
+    }, 5000)
+    setaddBlogVisible(false);
   }
 
   const handleCreate = async (evt, obj) => {
     evt.preventDefault();
-   
+
 
     try {
       const response = await blogService.create(obj)
@@ -77,7 +77,7 @@ const App = () => {
       setaddBlogVisible(false);
     } catch(e) {
       console.log(e)
-      setErrorMessage(`Unable to add blog post please try again`);
+      setErrorMessage('Unable to add blog post please try again');
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -94,7 +94,7 @@ const App = () => {
         setTimeout(() => {
           setNotifMessage(null)
         }, 5000);
-  
+
       } catch(e) {
         setErrorMessage(`Sorry unable to delete ${blog.title} blog by ${blog.author}, try again`);
         setTimeout(() => {
@@ -114,8 +114,8 @@ const App = () => {
     <div>
       {errorMessage !== null && <p className="error">{errorMessage}</p>}
       {notifMessage !== null && <p className="notification">{notifMessage}</p>}
-      {user === null ? <LoginForm handleLogin={handleLogin} /> : 
-        <BlogList 
+      {user === null ? <LoginForm handleLogin={handleLogin} /> :
+        <BlogList
           user={user}
           handleLogout={handleLogout}
           blogs={blogs.sort((a, b) => b.likes - a.likes)}

@@ -36,9 +36,9 @@ const deleteBlog = async id => {
 
 };
 
-export default { 
-  getAll, 
-  create, 
+export default {
+  getAll,
+  create,
   setToken,
   updateLikes,
   deleteBlog

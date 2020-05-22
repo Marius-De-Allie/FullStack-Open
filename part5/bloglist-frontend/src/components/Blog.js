@@ -13,7 +13,7 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
 
   const styles = {
     btn: {
-      display: 'inline', 
+      display: 'inline',
       marginLeft: '2px'
     },
     blogItem: {
@@ -60,18 +60,18 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
   const onClickDelete = async () => {
     await handleDelete(blog.id, blog);
 
-  } 
+  }
   return (
     <div style={styles.blogItem}>
       <div style={{padding: '5px'}}>
         {blog.title} {blog.author}
-        {showDetails ? 
-          <button 
+        {showDetails ?
+          <button
             style={styles.btn}
             onClick={handleToggleDetails}
           >
-          Hide</button> : 
-          <button 
+          Hide</button> :
+          <button
             style={styles.btn}
             onClick={handleToggleDetails}
           >
@@ -88,11 +88,11 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
 };
 
 Blog.propTypes = {
-  blog: PropTypes.object.isRequired, 
-  blogs: PropTypes.array.isRequired, 
-  setBlogs: PropTypes.func.isRequired, 
-  error: PropTypes.func.isRequired, 
-  handleDelete: PropTypes.func.isRequired, 
+  blog: PropTypes.object.isRequired,
+  blogs: PropTypes.array.isRequired,
+  setBlogs: PropTypes.func.isRequired,
+  error: PropTypes.func.isRequired,
+  handleDelete: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired
 }
 
