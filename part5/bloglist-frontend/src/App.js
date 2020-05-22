@@ -133,7 +133,7 @@ const App = () => {
         <BlogList 
           user={user}
           handleLogout={handleLogout}
-          blogs={blogs}
+          blogs={blogs.sort((a, b) => b.likes - a.likes)}
           handleCreate={handleCreate}
           addBlogVisible={addBlogVisible}
           show={() => handleAddBlogVisible(true)}
