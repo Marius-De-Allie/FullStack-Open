@@ -11,9 +11,6 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [notifMessage, setNotifMessage] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
   const [addBlogVisible, setaddBlogVisible] = useState(false);
 
   useEffect(() => {
@@ -92,17 +89,6 @@ const App = () => {
     </div>
   );
 
-  const handleTitleChange = (evt) => {
-    setTitle(evt.target.value)
-  };
-  const handleAuthorChange = (evt) => {
-    setAuthor(evt.target.value)
-  };
-  const handleUrlChange = (evt) => {
-    setUrl(evt.target.value)
-  };
-
-
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
     setUser(null);
@@ -113,17 +99,12 @@ const App = () => {
       setaddBlogVisible(false);
   }
 
-  const handleCreate = async evt => {
+  const handleCreate = async (evt, obj) => {
     evt.preventDefault();
-    const blogObj = {
-      title,
-      author,
-      url
-    }
+   
 
-    console.log(blogObj)
     try {
-      const response = await blogService.create(blogObj)
+      const response = await blogService.create(obj)
       setBlogs(blogs.concat(response))
       setNotifMessage(`New blog: ${response.title} added by ${response.author}!`);
       setTimeout(() => {
@@ -138,11 +119,6 @@ const App = () => {
         setErrorMessage(null)
       }, 5000)
     }
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-
-
   };
 
   const handleAddBlogVisible = (value) => {
@@ -158,12 +134,6 @@ const App = () => {
           user={user}
           handleLogout={handleLogout}
           blogs={blogs}
-          title={title}
-          author={author}
-          url={url}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange}
           handleCreate={handleCreate}
           addBlogVisible={addBlogVisible}
           show={() => handleAddBlogVisible(true)}
