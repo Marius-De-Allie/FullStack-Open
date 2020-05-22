@@ -27,6 +27,8 @@ const BlogList = (props) => (
         blogs={props.blogs} 
         setBlogs={props.setBlogs} 
         error={props.error}
+        handleDelete={props.handleDelete}
+        user={props.user}
       />
       )}
     </div>

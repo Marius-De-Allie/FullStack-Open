@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import blogService from './services/blogs'
-import loginService from './services/login'
+import React, { useState, useEffect } from 'react';
+import blogService from './services/blogs';
+import loginService from './services/login';
 import BlogList from './components/BlogList';
+import LoginForm from './components/LoginForm';
 import './App.css';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
   const [notifMessage, setNotifMessage] = useState(null);
@@ -28,15 +27,8 @@ const App = () => {
     }
   }, []);
 
-  const handleNameChange = (evt) => {
-    setUsername(evt.target.value)
-  }
 
-  const handlePassChange = (evt) => {
-    setPassword(evt.target.value)
-  }
-
-  const handleLogin = async (evt) => {
+  const handleLogin = async (evt, username, password) => {
     evt.preventDefault();
     try {
       const user = await loginService({username, password});
@@ -50,8 +42,6 @@ const App = () => {
 
       blogService.setToken(user.token);
       setUser(user);
-      setUsername('');
-      setPassword('');
     } catch(exception) {
       setErrorMessage('Incorrect username or password')
       setTimeout(() => {
@@ -60,34 +50,7 @@ const App = () => {
     }
   };
 
-  const LoginForm = () => (
-    <div>
-      <h2>Login to application</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label htmlFor="username">Username</label>
-          <input 
-            type="text" 
-            name="user" 
-            id="username" 
-            value={username}
-            onChange={handleNameChange}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password</label>
-          <input 
-            type="password" 
-            name="pass" 
-            id="password" 
-            value={password}
-            onChange={handlePassChange}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </div>
-  );
+  
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser');
@@ -121,15 +84,37 @@ const App = () => {
     }
   };
 
+  const handleDelete = async (id, blog) => {
+    if(window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+      try {
+        const response = await blogService.deleteBlog(id);
+        console.log(response);
+        setBlogs(blogs.filter(blog => blog.id !== id))
+        setNotifMessage(`${blog.title} blog by ${blog.author} has been deleted`);
+        setTimeout(() => {
+          setNotifMessage(null)
+        }, 5000);
+  
+      } catch(e) {
+        setErrorMessage(`Sorry unable to delete ${blog.title} blog by ${blog.author}, try again`);
+        setTimeout(() => {
+          setNotifMessage(null)
+        }, 5000);
+      }
+    } else {
+      // Do nothing.
+    }
+  };
+
   const handleAddBlogVisible = (value) => {
     setaddBlogVisible(value)
   };
-
+  console.log(user)
   return (
     <div>
       {errorMessage !== null && <p className="error">{errorMessage}</p>}
       {notifMessage !== null && <p className="notification">{notifMessage}</p>}
-      {user === null ? <LoginForm /> : 
+      {user === null ? <LoginForm handleLogin={handleLogin} /> : 
         <BlogList 
           user={user}
           handleLogout={handleLogout}
@@ -140,22 +125,10 @@ const App = () => {
           hide={() => handleAddBlogVisible(false)}
           setBlogs={setBlogs}
           error={setErrorMessage}
+          handleDelete={handleDelete}
         />}
     </div>
   )
 }
 
 export default App;
-
-// {user !== null && 
-  // <AddBlog
-  //   title={title}
-  //   author={author}
-  //   url={url}
-  //   handleTitleChange={handleTitleChange}
-  //   handleAuthorChange={handleAuthorChange}
-  //   handleUrlChange={handleUrlChange}
-  //   handleCreate={handleCreate}
-  //   visibility={addBlogVisible}
-  // />
-// }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import blogService from '../services/blogs';
 
-const Blog = ({ blog, blogs, setBlogs, error }) => {
+const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -51,8 +51,12 @@ const Blog = ({ blog, blogs, setBlogs, error }) => {
         error(null)
       }, 5000)
     }
-  }
+  };
 
+  const onClickDelete = async () => {
+    await handleDelete(blog.id, blog);
+
+  } 
   return (
     <div style={styles.blogItem}>
       <div style={{padding: '5px'}}>
@@ -71,7 +75,8 @@ const Blog = ({ blog, blogs, setBlogs, error }) => {
         }
         <div style={{display: showDetails ? '' : 'none'}}>
           <p>{blog.url}</p>
-          <p>{`liks: ${blog.likes}`} <button onClick={handleLike}>like</button></p>
+          <p>{`likes: ${blog.likes}`} <button onClick={handleLike}>like</button></p>
+          {blog.user.username === user.username && <button onClick={onClickDelete}>remove</button>}
         </div>
       </div>
     </div>
