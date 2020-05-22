@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import AddBlog from './components/AddBlog';
+import BlogList from './components/BlogList';
 import './App.css';
 
 const App = () => {
@@ -15,13 +14,13 @@ const App = () => {
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
-  const [key, setKey] = useState(0);
+  const [addBlogVisible, setaddBlogVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [key]);
+  }, []);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser');
@@ -48,6 +47,7 @@ const App = () => {
       setTimeout(() => {
         setNotifMessage(null)
       }, 5000)
+      setaddBlogVisible(false);
       // Add logged in user data to localStorage.
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user));
 
@@ -110,6 +110,7 @@ const App = () => {
       setTimeout(() => {
         setNotifMessage(null)
       }, 5000)
+      setaddBlogVisible(false);
   }
 
   const handleCreate = async evt => {
@@ -123,12 +124,13 @@ const App = () => {
     console.log(blogObj)
     try {
       const response = await blogService.create(blogObj)
-      // Update key peice of component state to force app component to rerender when new blog is added.
-      setKey(Math.random() * 10);
+      setBlogs(blogs.concat(response))
       setNotifMessage(`New blog: ${response.title} added by ${response.author}!`);
       setTimeout(() => {
         setNotifMessage(null)
       }, 5000)
+      // hide add blog form
+      setaddBlogVisible(false);
     } catch(e) {
       console.log(e)
       setErrorMessage(`Unable to add blog post please try again`);
@@ -141,37 +143,47 @@ const App = () => {
     setUrl('')
 
 
-  }
+  };
 
-  const BlogList = () => (
-    <div>
-      <h2>blogs</h2>
-      {/* {JSON.stringify(user.token)} */}
-      <h3>{`${user.name} logged in`}</h3>
-      <button onClick={handleLogout}>logout</button>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-    </div>
-  );
+  const handleAddBlogVisible = (value) => {
+    setaddBlogVisible(value)
+  };
 
   return (
     <div>
       {errorMessage !== null && <p className="error">{errorMessage}</p>}
       {notifMessage !== null && <p className="notification">{notifMessage}</p>}
-      {user === null ? <LoginForm /> : <BlogList />}
-      {user !== null &&<AddBlog
-        title={title}
-        author={author}
-        url={url}
-        handleTitleChange={handleTitleChange}
-        handleAuthorChange={handleAuthorChange}
-        handleUrlChange={handleUrlChange}
-        handleCreate={handleCreate}
-      />
-    }
+      {user === null ? <LoginForm /> : 
+        <BlogList 
+          user={user}
+          handleLogout={handleLogout}
+          blogs={blogs}
+          title={title}
+          author={author}
+          url={url}
+          handleTitleChange={handleTitleChange}
+          handleAuthorChange={handleAuthorChange}
+          handleUrlChange={handleUrlChange}
+          handleCreate={handleCreate}
+          addBlogVisible={addBlogVisible}
+          show={() => handleAddBlogVisible(true)}
+          hide={() => handleAddBlogVisible(false)}
+        />}
     </div>
   )
 }
 
-export default App
+export default App;
+
+// {user !== null && 
+  // <AddBlog
+  //   title={title}
+  //   author={author}
+  //   url={url}
+  //   handleTitleChange={handleTitleChange}
+  //   handleAuthorChange={handleAuthorChange}
+  //   handleUrlChange={handleUrlChange}
+  //   handleCreate={handleCreate}
+  //   visibility={addBlogVisible}
+  // />
+// }
