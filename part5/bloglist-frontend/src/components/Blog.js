@@ -1,8 +1,53 @@
-import React from 'react'
-const Blog = ({ blog }) => (
-  <div>
-    {blog.title} {blog.author}
-  </div>
-)
+import React, { useState, useEffect } from 'react';
+
+const Blog = ({ blog }) => {
+
+  const [showDetails, setShowDetails] = useState(false);
+
+  useEffect(() => {
+    setShowDetails(false)
+  }, []);
+
+  const styles = {
+    btn: {
+      display: 'inline', 
+      marginLeft: '2px'
+    },
+    blogItem: {
+      border: '1px solid black',
+      borderRadius: '5px',
+      marginBottom: '10px'
+    }
+  };
+
+  const handleToggleDetails = () => {
+    setShowDetails(!showDetails)
+  };
+
+  return (
+    <div style={styles.blogItem}>
+      <div style={{padding: '5px'}}>
+        {blog.title} {blog.author}
+        {showDetails ? 
+          <button 
+            style={styles.btn}
+            onClick={handleToggleDetails}
+          >
+          Hide</button> : 
+          <button 
+            style={styles.btn}
+            onClick={handleToggleDetails}
+          >
+          View</button>
+        }
+        <div style={{display: showDetails ? '' : 'none'}}>
+          <p>{blog.url}</p>
+          <p>{`liks: ${blog.likes}`} <button onClick={() => console.log('liked')}>like</button></p>
+        </div>
+      </div>
+    </div>
+  )
+};
+
 
 export default Blog
