@@ -3,6 +3,21 @@ import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
 import Blog from './Blog';
 
+class Button extends React.Component {
+
+    handleClick = () => {
+        console.log('clicked');
+    }
+
+    render() {
+        <div className="component">
+            <button onClick={this.handleClick}>
+            test
+            </button>
+        </div>
+    }
+};
+
 describe('<Blog /> component', () => {
 
     let component;
@@ -79,6 +94,34 @@ describe('<Blog /> component', () => {
         const details = component.container.querySelector('.details');
 
         expect(details).not.toHaveStyle('display: none')
+    });
+
+    test('clicking like button twice calls event handler twice', () => {
+
+        const mockHandler = jest.fn();
+        
+        component = render(
+                    <Blog
+                        blog={blog}
+                        user={user}
+                        
+                    >
+                        <button onClick={mockHandler} className="view-btn">View</button>
+                    </Blog>
+                        
+                        
+                    
+                        
+                    
+                )
+
+                
+        const button = component.getByText('View');
+        fireEvent.click(button);
+        fireEvent.click(button);
+
+        component.debug()
+        expect(mockHandler.mock.calls).toHaveLength(2);
     });
 
 });
