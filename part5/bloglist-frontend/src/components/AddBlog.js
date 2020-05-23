@@ -44,7 +44,7 @@ const AddBlog = (props) => {
             <label htmlFor="url">url</label>
             <input type="text" value={url} id="url" onChange={handleUrlChange}/>
           </div>
-          <button type="submit" disabled={title === '' || author === '' || url === ''}>create</button>
+          <button id="create" type="submit" disabled={title === '' || author === '' || url === ''}>create</button>
         </form>
       </div>
       <div style={{display: props.addBlogVisible ? 'none' : ''}}>
