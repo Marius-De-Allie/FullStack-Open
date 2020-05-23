@@ -62,39 +62,43 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
 
   }
   return (
-    <div style={styles.blogItem}>
+    <div style={styles.blogItem} className="blog">
       <div style={{padding: '5px'}}>
-        {blog.title} {blog.author}
+        <span className="title">{blog.title}</span><span className="author">{` ${blog.author}`}</span> 
         {showDetails ?
           <button
             style={styles.btn}
             onClick={handleToggleDetails}
+            className="hide-btn"
           >
-          Hide</button> :
+            Hide
+          </button> :
           <button
             style={styles.btn}
             onClick={handleToggleDetails}
+            className="view-btn"
           >
-          View</button>
+            View
+          </button>
         }
-        <div style={{display: showDetails ? '' : 'none'}}>
+        <div style={{display: showDetails ? '' : 'none'}} className="details">
           <p>{blog.url}</p>
-          <p>{`likes: ${blog.likes}`} <button onClick={handleLike}>like</button></p>
-          {blog.user.username === user.username && <button onClick={onClickDelete}>remove</button>}
+          <p className="likes">{`likes: ${blog.likes}`} <button onClick={handleLike} className="like-btn">like</button></p>
+          {blog.user.username === user.username && <button className="remove-btn" onClick={onClickDelete}>remove</button>}
         </div>
       </div>
     </div>
   )
 };
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  blogs: PropTypes.array.isRequired,
-  setBlogs: PropTypes.func.isRequired,
-  error: PropTypes.func.isRequired,
-  handleDelete: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
-}
+// Blog.propTypes = {
+//   blog: PropTypes.object.isRequired,
+//   blogs: PropTypes.array.isRequired,
+//   setBlogs: PropTypes.func.isRequired,
+//   error: PropTypes.func.isRequired,
+//   handleDelete: PropTypes.func.isRequired,
+//   user: PropTypes.object.isRequired
+// }
 
 
 export default Blog
