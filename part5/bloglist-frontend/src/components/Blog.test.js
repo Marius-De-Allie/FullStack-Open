@@ -62,8 +62,23 @@ describe('<Blog /> component', () => {
         const details = component.container.querySelector('.details');
 
         expect(details).toHaveStyle('display: none')
+    });
 
+    test('after clicking the view button, url and likes elements are displayed', () => {
+        
+        component = render(
+                    <Blog
+                        blog={blog}
+                        user={user}
+                    />
+                )
 
+        const button = component.container.querySelector('.view-btn');
+        fireEvent.click(button)
+
+        const details = component.container.querySelector('.details');
+
+        expect(details).not.toHaveStyle('display: none')
     });
 
 });
