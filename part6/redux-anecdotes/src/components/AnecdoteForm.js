@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { add } from '../reducers/anecdoteReducer'; 
 
 
-const CreateAnecdote = (props) => {
+const AnecdoteForm = (props) => {
 
     const [value, setValue] = useState('');
     const dispatch= useDispatch();
@@ -39,4 +39,4 @@ const CreateAnecdote = (props) => {
     );
 };
 
-export default CreateAnecdote
+export default AnecdoteForm;
