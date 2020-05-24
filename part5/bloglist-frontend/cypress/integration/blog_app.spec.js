@@ -68,16 +68,46 @@ describe('Blog app', function() {
                 cy.get('#create').click();
             });
 
-            it.only('user can like a blog', function() {
+            it('user can like a blog', function() {
                 cy.contains('View').click().get('.like-btn').click();
     
                 cy.contains('likes: 1');
                 
             })
         });
-
-
-
-
     })
+});
+
+/*** THIS TEST NEEDS TO BE RUN USING npm run dev backend script, not npm start:test like other cypress tests.
+    ALSO NEED TO ENSURE THAT THERE ARE ATLEAST 2 NOTES IN THE DEV (NOT TEST) DATABASE THAT WERE BOTH CREATED BY USER LISA THOMAS, username: lt457479
+    password: password1 ***/
+
+describe('Delete blog', function() {
+
+    beforeEach(function() {
+        cy.visit('http://localhost:3000');
+    })
+
+    it('user who created blog can delete blog', function() {
+
+        
+        cy.get('#username').type('lt457479');
+        cy.get('#password').type('password1');
+        cy.get('#login-button').click();
+
+        cy.contains('View').click();
+        // delete blog
+        cy.contains('remove').click();
+    });
+    
+    it.only('user cannot delete blog if user did not create blog', function() {
+        
+        cy.get('#username').type('jc2000');
+        cy.get('#password').type('password2');
+        cy.get('#login-button').click();
+    
+        cy.contains('View').click();
+        
+        cy.get('html').should('not.contain', 'remove')
+    }) 
 });
