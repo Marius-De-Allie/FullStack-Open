@@ -4,7 +4,7 @@ import vote from './actions/anecdotes';
 import CreateAnedcdote from './components/CreateAnecdote';
 
 const App = () => {
-  const anecdotes = useSelector(state => state)
+  const anecdotes = useSelector(state => state.sort((a, b) => b.votes - a.votes))
   const dispatch = useDispatch()
   return (
     <div>
