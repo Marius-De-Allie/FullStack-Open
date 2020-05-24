@@ -1,4 +1,4 @@
-import { ADD_VOTE } from '../actions/anecdotes';
+import { ADD_VOTE, ADD_ANECDOTE } from '../actions/anecdotes';
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -35,6 +35,11 @@ const reducer = (state = initialState, action) => {
       return state.map(el => {
         return el.id === action.id ? updatedAnec : el;
       })
+    case ADD_ANECDOTE:
+      return [
+        ...state,
+        {...action.newAnec, id: getId()}
+      ]
     default:
       return state;
   }
