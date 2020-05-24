@@ -1,4 +1,17 @@
-import { ADD_VOTE, ADD_ANECDOTE } from '../actions/anecdotes';
+// Action creators.
+
+const ADD_VOTE = 'ADD_VOTE';
+const ADD_ANECDOTE = 'ADD_ANECDOTE';
+
+const vote = (id) => ({
+    type: ADD_VOTE,
+    id
+});
+
+const add = (newAnec) => ({
+    type: ADD_ANECDOTE,
+    newAnec
+});
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -45,4 +58,4 @@ const reducer = (state = initialState, action) => {
   }
 }
 
-export default reducer
+export { reducer as default, add, vote }

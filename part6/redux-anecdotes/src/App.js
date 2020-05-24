@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import vote from './actions/anecdotes';
+import { vote } from './reducers/anecdoteReducer';
 import CreateAnedcdote from './components/CreateAnecdote';
 
 const App = () => {

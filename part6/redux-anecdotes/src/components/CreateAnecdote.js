@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { add } from '../actions/anecdotes'; 
+import { add } from '../reducers/anecdoteReducer'; 
 
 
 const CreateAnecdote = (props) => {
