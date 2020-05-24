@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { add } from '../reducers/anecdoteReducer'; 
 
 
-const AnecdoteForm = (props) => {
+const AnecdoteForm = () => {
 
     const [value, setValue] = useState('');
     const dispatch= useDispatch();
