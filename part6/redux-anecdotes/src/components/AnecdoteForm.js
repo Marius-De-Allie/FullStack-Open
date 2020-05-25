@@ -2,21 +2,24 @@ import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { add } from '../reducers/anecdoteReducer'; 
 import { setNotification, removeNotification } from '../reducers/notificationReducer'; 
+import anecdoteService from '../services/anecdotes';
 
 const AnecdoteForm = () => {
 
     const [value, setValue] = useState('');
     const dispatch= useDispatch();
 
-    const handleSubmit = (evt) => {
+    const handleSubmit = async (evt) => {
         evt.preventDefault();
 
         const anecObj = {
             content: value,
             votes: 0
         }
+        // Add new anecdeote to backend db.
+        const newAnec = await anecdoteService.createNew(anecObj);
         // dispatch add action, passing in new anecdote object as arg.
-        dispatch(add(anecObj));
+        dispatch(add(newAnec));
         setValue('');
         // dispatch set notification action.
         dispatch(setNotification(`New anecdote '${anecObj.content}' successfully added.`));

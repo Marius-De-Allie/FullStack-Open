@@ -2,6 +2,7 @@
 
 const ADD_VOTE = 'ADD_VOTE';
 const ADD_ANECDOTE = 'ADD_ANECDOTE';
+const INIT_ANECDOTES = 'INIT_ANECDOTES';
 
 const vote = (id) => ({
     type: ADD_VOTE,
@@ -13,31 +14,18 @@ const add = (newAnec) => ({
     newAnec
 });
 
-const anecdotesAtStart = [
-  'If it hurts, do it more often',
-  'Adding manpower to a late software project makes it later!',
-  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
-  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
-  'Premature optimization is the root of all evil.',
-  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-]
+const initializeAnecdotes = (anecdotes) => ({
+  type: INIT_ANECDOTES,
+  anecdotes
+});
 
-const getId = () => (100000 * Math.random()).toFixed(0)
 
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
-const initialState = anecdotesAtStart.map(asObject)
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = [], action) => {
   console.log('state now: ', state)
   console.log('action', action)
   switch(action.type) {
+    case INIT_ANECDOTES:
+      return state = action.anecdotes
     case ADD_VOTE:
       const anec = state.find(anec => anec.id === action.id);
       const updatedAnec = {
@@ -51,11 +39,11 @@ const reducer = (state = initialState, action) => {
     case ADD_ANECDOTE:
       return [
         ...state,
-        {...action.newAnec, id: getId()}
+        action.newAnec
       ]
     default:
       return state;
   }
 }
 
-export { reducer as default, add, vote }
+export { reducer as default, add, vote, initializeAnecdotes }
