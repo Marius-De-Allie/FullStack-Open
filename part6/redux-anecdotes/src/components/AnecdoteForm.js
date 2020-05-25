@@ -1,8 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { add } from '../reducers/anecdoteReducer'; 
+import { handleAdd } from '../reducers/anecdoteReducer'; 
 import { setNotification, removeNotification } from '../reducers/notificationReducer'; 
-import anecdoteService from '../services/anecdotes';
 
 const AnecdoteForm = () => {
 
@@ -15,12 +14,10 @@ const AnecdoteForm = () => {
         const anecObj = {
             content: value,
             votes: 0
-        }
-        // Add new anecdeote to backend db.
-        const newAnec = await anecdoteService.createNew(anecObj);
-        // dispatch add action, passing in new anecdote object as arg.
-        dispatch(add(newAnec));
+        };
         setValue('');
+        // dispatch hanldeAdd action, passing in new anecdote object as arg.
+        dispatch(handleAdd(anecObj));
         // dispatch set notification action.
         dispatch(setNotification(`New anecdote '${anecObj.content}' successfully added.`));
         // dispatch remove notification ation.
