@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react'
-import { Switch, Route, NavLink, useRouteMatch, Link } from 'react-router-dom';
+import { Switch, Route, NavLink, useRouteMatch, Link, useHistory } from 'react-router-dom';
 import './app.css';
 
 const Menu = () => {
@@ -56,6 +56,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const history = useHistory();
 
 
   const handleSubmit = (e) => {
@@ -65,7 +66,15 @@ const CreateNew = (props) => {
       author,
       info,
       votes: 0
-    })
+    });
+    // Redirect to homepage.
+    history.push('/');
+    // set notification.
+    props.setNotification(`a new anecdote '${content}' created!`)
+    setTimeout(() => {
+      props.setNotification('');
+    }, 10000)
+
   }
 
   return (
@@ -136,10 +145,11 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      <p style={{display: notification === '' ? 'none' : ''}}>{notification}</p>
       <Switch>
         <Route path="/" exact render={() => <AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" component={About} />
-        <Route path="/create" render={() => <CreateNew addNew={addNew} />} />
+        <Route path="/create" render={() => <CreateNew addNew={addNew} setNotification={setNotification} />} />
         <Route path="/anecdotes/:id" render={() => <AnecdoteList anecdotes={anecdotes.filter(a => a.id === match.params.id )} />} />
       </Switch>
       <Footer />
