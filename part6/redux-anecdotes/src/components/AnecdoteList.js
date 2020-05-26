@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import{ handleAddVote } from '../reducers/anecdoteReducer';
-import { setNotification, removeNotification } from '../reducers/notificationReducer';
+import { handleNotification } from '../reducers/notificationReducer';
 
 const AnecdoteList = () => {
     const dispatch = useDispatch();
@@ -33,11 +33,7 @@ const AnecdoteList = () => {
         // dispatch handle add vote thunk action.
         dispatch(handleAddVote(id, updatedAnec))
         // dispatch SET_NOTIFICATION action.
-        dispatch(setNotification(`you voted '${anecdote.content}'`));
-        // dispatch remove notification ation.
-        setTimeout(() => {
-            dispatch(removeNotification())
-        }, 5000)
+        dispatch(handleNotification(`you voted '${anecdote.content}'`, 5000));
     };
 
     return (

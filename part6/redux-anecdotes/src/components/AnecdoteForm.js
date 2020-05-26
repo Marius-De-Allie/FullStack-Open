@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { handleAdd } from '../reducers/anecdoteReducer'; 
-import { setNotification, removeNotification } from '../reducers/notificationReducer'; 
+import { handleNotification } from '../reducers/notificationReducer'; 
 
 const AnecdoteForm = () => {
 
@@ -18,12 +18,9 @@ const AnecdoteForm = () => {
         setValue('');
         // dispatch hanldeAdd action, passing in new anecdote object as arg.
         dispatch(handleAdd(anecObj));
-        // dispatch set notification action.
-        dispatch(setNotification(`New anecdote '${anecObj.content}' successfully added.`));
-        // dispatch remove notification ation.
-        setTimeout(() => {
-            dispatch(removeNotification());
-        }, 5000);
+        // dispatch handle notification thunk action.
+        dispatch(handleNotification(`New anecdote '${anecObj.content}' successfully added.`, 5000));
+        
     };
 
     return (
