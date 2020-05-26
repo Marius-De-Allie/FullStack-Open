@@ -4,16 +4,18 @@ import AnecdoteForm from './components/AnecdoteForm';
 import AnecdoteList from './components/AnecdoteList';
 import Notification from './components/Notification';
 import Filter from './components/Filter';
-import { hanldeInitializeAnecdotes } from './reducers/anecdoteReducer';
+import { handleInitAnecdotes } from './reducers/anecdoteReducer';
 
 const App = () => {
   const dispatch = useDispatch();
   
   useEffect(() => {
-    dispatch(hanldeInitializeAnecdotes)
+    dispatch(handleInitAnecdotes)
   }, [dispatch]);
 
+  const anecs= useSelector(state => state.anecdotes);
   const notification = useSelector(state => state.notification);
+  console.log(anecs)
   return (
     <div>
       <h2>Anecdotes</h2>
