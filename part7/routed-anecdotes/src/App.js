@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Switch, Route, NavLink } from 'react-router-dom';
+import React, { useState, Fragment } from 'react'
+import { Switch, Route, NavLink, useRouteMatch, Link } from 'react-router-dom';
 import './app.css';
 
 const Menu = () => {
@@ -19,7 +19,13 @@ const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => 
+          <li key={anecdote.id}>
+            <Link to={`/anecdotes/${anecdote.id}`}>
+              {anecdote.content}
+            </Link>
+          </li>
+        )}
     </ul>
   </div>
 )
@@ -124,6 +130,8 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const match = useRouteMatch('/anecdotes/:id');
+
   return (
     <div>
       <h1>Software anecdotes</h1>
@@ -132,6 +140,7 @@ const App = () => {
         <Route path="/" exact render={() => <AnecdoteList anecdotes={anecdotes} />} />
         <Route path="/about" component={About} />
         <Route path="/create" render={() => <CreateNew addNew={addNew} />} />
+        <Route path="/anecdotes/:id" render={() => <AnecdoteList anecdotes={anecdotes.filter(a => a.id === match.params.id )} />} />
       </Switch>
       <Footer />
     </div>
