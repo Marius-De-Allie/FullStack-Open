@@ -1,14 +1,12 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { setFilter } from '../reducers/filterReducer';
 
-const Filter = () => {
-
-    const dispatch = useDispatch();
+const Filter = ({setFilter}) => {
 
     const handleChange = (event) => {
       const filterBy = event.target.value.trimStart();
-      dispatch(setFilter(filterBy));
+      setFilter(filterBy);
 
     };
     const style = {
@@ -22,4 +20,8 @@ const Filter = () => {
     )
   };
 
-  export default Filter;
+  const mapDispatchToProps = ({
+    setFilter
+  });
+
+  export default connect(null, mapDispatchToProps)(Filter);

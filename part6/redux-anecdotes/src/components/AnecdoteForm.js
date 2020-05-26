@@ -1,12 +1,10 @@
 import React, { Fragment, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import { handleAdd } from '../reducers/anecdoteReducer'; 
 import { handleNotification } from '../reducers/notificationReducer'; 
 
-const AnecdoteForm = () => {
-
+const AnecdoteForm = ({ handleAdd, handleNotification}) => {
     const [value, setValue] = useState('');
-    const dispatch= useDispatch();
 
     const handleSubmit = async (evt) => {
         evt.preventDefault();
@@ -17,9 +15,9 @@ const AnecdoteForm = () => {
         };
         setValue('');
         // dispatch hanldeAdd action, passing in new anecdote object as arg.
-        dispatch(handleAdd(anecObj));
+        handleAdd(anecObj);
         // dispatch handle notification thunk action.
-        dispatch(handleNotification(`New anecdote '${anecObj.content}' successfully added.`, 5000));
+        handleNotification(`New anecdote '${anecObj.content}' successfully added.`, 5000);
         
     };
 
@@ -40,4 +38,9 @@ const AnecdoteForm = () => {
     );
 };
 
-export default AnecdoteForm;
+const mapDispatchToProps = ({
+    handleAdd,
+    handleNotification
+});
+
+export default connect(null, mapDispatchToProps)(AnecdoteForm);
