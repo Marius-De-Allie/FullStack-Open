@@ -60,6 +60,10 @@ const CreateNew = (props) => {
   const reset = useField('reset');
   const history = useHistory();
 
+  const {reset: resetContent, ...contentRest} = content;
+  const {reset: resetAuthor, ...authorRest} = author;
+  const {reset: resetInfo, ...infoRest} = info;
+
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -86,18 +90,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' {...content} />
+          <input name='content' {...contentRest} />
         </div>
         <div>
           author
-          <input name='author' {...author} />
+          <input name='author' {...authorRest} />
         </div>
         <div>
           url for more info
-          <input name='info' {...info} />
+          <input name='info' {...infoRest} />
         </div>
         <button>create</button>
-        <input name='reset' type={reset.type} onClick={() => {content.reset(); author.reset(); info.reset();}} />
+        <input name='reset' type={reset.type} onClick={() => {resetContent(); resetAuthor(); resetInfo();}} />
       </form>
     </div>
   )
