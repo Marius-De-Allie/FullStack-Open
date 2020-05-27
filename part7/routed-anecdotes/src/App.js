@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState } from 'react'
 import { Switch, Route, NavLink, useRouteMatch, Link, useHistory } from 'react-router-dom';
 import './app.css';
 import { useField } from './hooks';
@@ -57,6 +57,7 @@ const CreateNew = (props) => {
   const content = useField('text')
   const author = useField('text')
   const info = useField('text')
+  const reset = useField('reset');
   const history = useHistory();
 
 
@@ -96,6 +97,7 @@ const CreateNew = (props) => {
           <input name='info' {...info} />
         </div>
         <button>create</button>
+        <input name='reset' type={reset.type} onClick={() => {content.reset(); author.reset(); info.reset();}} />
       </form>
     </div>
   )
