@@ -144,7 +144,8 @@ const resolvers = {
       const newBook = {...args, id: uuid()};
       books = [...books, newBook];
       if(!authors.includes(a => a.name === args.author)) {
-        authors = [...authors, {name: args.author, born: null}]
+        const newAuthor = {name: args.author, born: null, id: uuid()}
+        authors = [...authors, newAuthor]
       } else {
         //  do nothing.
       }
