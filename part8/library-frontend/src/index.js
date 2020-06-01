@@ -18,6 +18,13 @@ query {
     born,
     bookCount
   }
+  allBooks {
+    title,
+    published,
+    author,
+    id,
+    genres
+  }
 }
 `
 client.query({query})

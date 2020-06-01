@@ -15,20 +15,39 @@ query {
   }
 }
 `
+const ALL_BOOKS = gql`
+query {
+  allBooks {
+    title,
+    published,
+    author,
+    id
+  }
+}
+`
 
 
 const App = () => {
   const result = useQuery(ALL_AUTHORS);
+  const bookResults = useQuery(ALL_BOOKS);
 
   const [page, setPage] = useState('authors');
   const [authors, setAuthors] = useState([]);
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
     if(result.data) {
       setAuthors([...result.data.allAuthors])
     }
-  }, [result])
-  console.log(result.data)
+  }, [result]);
+
+  useEffect(() => {
+    if(bookResults.data) {
+      setBooks(bookResults.data.allBooks)
+    } else {
+      // do nothing
+    }
+  }, [bookResults])
   return (
     <div>
       <div>
@@ -44,6 +63,7 @@ const App = () => {
 
       <Books
         show={page === 'books'}
+        books={books}
       />
 
       <NewBook
