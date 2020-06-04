@@ -1,11 +1,11 @@
 interface ExerciseValues {
     value1: number;
     value2: Array<number>;
-};
+}
 
 const parseArgs = (args: Array<string>): ExerciseValues => {
     let val1;
-    let val2: Array<number> = [];
+    const val2: Array<number> = [];
     if(args.length < 4) throw new Error('Not enough arguments');
 
     const valueArgs = args.slice(2);
@@ -19,17 +19,17 @@ const parseArgs = (args: Array<string>): ExerciseValues => {
     valueArgs.forEach(el => {
         if(!isNaN(Number(el))) {
             val1 = Number(valueArgs[0]);
-            val2.push(Number(el))
+            val2.push(Number(el));
         }
         else {
-            throw new Error('Provided values were not numbers!')
+            throw new Error('Provided values were not numbers!');
         }
     });
     return {
         value1: val1,
         value2: val2
-    }
-}
+    };
+};
 
 
 
@@ -44,16 +44,15 @@ interface Result {
 }
 const calculateExercises = (target: number, hours: Array<number>): Result => {
 
-    const trainingDaysArray = hours.filter(el => el > 0);
-    let avg: number;
-    let userRating: number;
-    let ratingMessage: string;
+    let avg = 0;
+    let userRating = 0;
+    let ratingMessage = '';
 
     const calcAverage = () => {
-        let total: number;
+        let total = 0;
         total = hours.reduce((sum, el) => sum + el, 0);
         return Math.round(total / hours.length);
-    }
+    };
 
     avg = calcAverage();
     // Calculate rating property value based on average and target argument passed into function.
@@ -68,11 +67,11 @@ const calculateExercises = (target: number, hours: Array<number>): Result => {
     // Rating description log.
 
     if(userRating >= 3) {
-        ratingMessage = 'Excellent job, keep it up!'
+        ratingMessage = 'Excellent job, keep it up!';
     }else if (userRating === 2) {
-        ratingMessage = 'Good effort, but you can do better.'
+        ratingMessage = 'Good effort, but you can do better.';
     } else if(userRating === 1) {
-        ratingMessage = 'Disappointing performance, you must do better.'
+        ratingMessage = 'Disappointing performance, you must do better.';
     }
 
    
@@ -85,15 +84,12 @@ const calculateExercises = (target: number, hours: Array<number>): Result => {
         ratingDescription: ratingMessage,
         target: target,
         average: avg
-    }
+    };
 };
 
 try {
     const {value1, value2} = parseArgs(process.argv);
     console.log(calculateExercises(value1, value2));
-} catch(e) {
-    console.log('Error, something bad happened, message:', e.message)
-};
-
-
-// console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+} catch({message}) {
+    console.log('Error, something bad happened, message:', message);
+}
