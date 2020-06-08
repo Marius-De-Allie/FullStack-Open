@@ -101,26 +101,21 @@ describe('<Blog /> component', () => {
         const mockHandler = jest.fn();
         
         component = render(
-                    <Blog
-                        blog={blog}
-                        user={user}
-                        
-                    >
-                        <button onClick={mockHandler} className="view-btn">View</button>
-                    </Blog>
-                        
-                        
-                    
-                        
-                    
-                )
+            <Blog
+                blog={blog}
+                user={user}
+                handleLike={mockHandler}
+            />
+        );
 
+        const view = component.container.querySelector('.view-btn');
+        fireEvent.click(view);
                 
-        const button = component.getByText('View');
-        fireEvent.click(button);
-        fireEvent.click(button);
-
-        component.debug()
+        const likeButton = component.container.querySelector('.like-btn');
+        fireEvent.click(likeButton);
+        fireEvent.click(likeButton);
+ 
+        
         expect(mockHandler.mock.calls).toHaveLength(2);
     });
 
