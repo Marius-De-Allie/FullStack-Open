@@ -97,10 +97,11 @@ describe('Delete blog', function() {
 
         cy.contains('View').click();
         // delete blog
+        cy.contains('remove');
         cy.contains('remove').click();
     });
     
-    it.only('user cannot delete blog if user did not create blog', function() {
+    it('user cannot delete blog if user did not create blog', function() {
         
         cy.get('#username').type('jc2000');
         cy.get('#password').type('password2');
@@ -108,6 +109,70 @@ describe('Delete blog', function() {
     
         cy.contains('View').click();
         
-        cy.get('html').should('not.contain', 'remove')
+        cy.get('html').should('not.contain', 'remove');
     }) 
+});
+
+describe('Blogs sort order', function() {
+    let user;
+    beforeEach(function() {
+        // empty db.
+        cy.request('POST', 'http://localhost:3003/api/testing/reset');
+        user = {
+            name: 'Lisa Thomas',
+            username: 'lt1234',
+            password: 'password1'
+        };
+    });
+
+    it('blogs sorted descending order by likes property', function() {
+
+        cy.request('POST', 'http://localhost:3003/api/users', user);
+        cy.visit('http://localhost:3000');
+
+        cy.get('#username').type('lt1234');
+        cy.get('#password').type('password1');
+        cy.get('#login-button').click();
+
+        // Create two new blog entries.
+        cy.contains('new blog').click();
+            cy.get('#title').type('Test Blog');
+            cy.get('#author').type('Test Author');
+            cy.get('#url').type('https://www.testblog.com/1');
+            cy.get('#create').click();
+
+        cy.contains('new blog').click();
+            cy.get('#title').type('Another Blog');
+            cy.get('#author').type('Another Author ');
+            cy.get('#url').type('https://www.anotherblog.com/1');
+            cy.get('#create').click();
+
+        // Like first blog entry.
+        cy.get('.blog-list')
+        .contains('Test Blog')
+        .get('.view-btn').click()
+        .get('.like-btn').eq(0).click();
+
+        // Like 2nd blog entry twice.
+        cy.get('.blog-list')
+        .contains('Another Blog')
+        .get('.view-btn').click()
+        .get('.like-btn').eq(1).click()
+        .get('.like-btn').eq(1).click();
+
+        // Request blogs array from backend.
+        cy.request('GET', 'http://localhost:3003/api/blogs')
+        .then(response => {
+            // sort array by likes.
+            const sortedArray = response.body.sort((a, b) => b.likes - a.likes)
+            
+            // Verify that 1st blog list item on page is the same as first blog item in sorted blog array.
+            cy.get('.blog').eq(0)
+            .should('contain', sortedArray[0].title);
+
+            // Verify that 2nd blog list item on page is the same as second blog item in sorted blog array.
+            cy.get('.blog').eq(1)
+            .should('contain', sortedArray[1].title);
+        })
+    })
 });

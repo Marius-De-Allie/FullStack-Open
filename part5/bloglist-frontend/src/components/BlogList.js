@@ -3,7 +3,7 @@ import AddBlog from './AddBlog';
 import Blog from './Blog';
 
 const BlogList = (props) => (
-  <div>
+  <div className="blog-list">
     <h2>blogs</h2>
     {/* {JSON.stringify(user.token)} */}
     <h3>{`${props.user.name} logged in`}</h3>
