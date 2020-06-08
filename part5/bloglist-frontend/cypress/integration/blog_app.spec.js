@@ -95,6 +95,19 @@ describe('Delete blog', function() {
         cy.get('#password').type('password1');
         cy.get('#login-button').click();
 
+        // Add new blog entries.
+        cy.contains('new blog').click();
+        cy.get('#title').type('Test Blog');
+        cy.get('#author').type('Test Author');
+        cy.get('#url').type('https://www.testblog.com/1');
+        cy.get('#create').click();
+
+        cy.contains('new blog').click();
+        cy.get('#title').type('Another Blog');
+        cy.get('#author').type('Another Author ');
+        cy.get('#url').type('https://www.anotherblog.com/1');
+        cy.get('#create').click();
+
         cy.contains('View').click();
         // delete blog
         cy.contains('remove');
@@ -106,10 +119,9 @@ describe('Delete blog', function() {
         cy.get('#username').type('jc2000');
         cy.get('#password').type('password2');
         cy.get('#login-button').click();
-    
+
         cy.contains('View').click();
-        
-        cy.get('html').should('not.contain', 'remove');
+        cy.get('.blog').eq(0).should('not.contain', 'remove');
     }) 
 });
 

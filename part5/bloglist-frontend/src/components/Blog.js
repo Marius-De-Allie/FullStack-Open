@@ -61,6 +61,8 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
     await handleDelete(blog.id, blog);
 
   }
+  console.log('USER', user)
+  console.log('BLOGUSER', blog.user)
   return (
     <div style={styles.blogItem} className="blog">
       <div style={{padding: '5px'}}>
