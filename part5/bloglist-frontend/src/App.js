@@ -8,6 +8,7 @@ import handleInitalBlogs, { addBlog, deleteBlog } from './actions/blogs';
 import { loginUser } from './actions/user';
 import Users from './components/Users';
 import UserDetails from './components/UserDetails';
+import BlogDetails from './components/BlogDetails';
 import './App.css';
 
 const App = () => {
@@ -72,6 +73,7 @@ const App = () => {
         <Route path="/" exact component={user === null ? LoginForm : BlogList} />
         <Route path="/users" exact component={Users} />
         <Route path="/users/:id" component={UserDetails} />
+        <Route path="/blogs/:id" component={BlogDetails} />
       </Switch>
     </div>
   )
