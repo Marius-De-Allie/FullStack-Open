@@ -7,6 +7,7 @@ import LoginForm from './components/LoginForm';
 import handleInitalBlogs, { addBlog, deleteBlog } from './actions/blogs';
 import { loginUser } from './actions/user';
 import Users from './components/Users';
+import UserDetails from './components/UserDetails';
 import './App.css';
 
 const App = () => {
@@ -69,7 +70,8 @@ const App = () => {
       {notification !== null && <p className="notification">{notification}</p>}
       <Switch>
         <Route path="/" exact component={user === null ? LoginForm : BlogList} />
-        <Route path="/users" component={Users} />
+        <Route path="/users" exact component={Users} />
+        <Route path="/users/:id" component={UserDetails} />
       </Switch>
     </div>
   )
