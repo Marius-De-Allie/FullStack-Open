@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import blogService from '../services/blogs';
+import { setDetails, toggleDetails } from '../actions/showDetails';
+import { addLike, deleteBlog } from '../actions/blogs';
+import { setErrorMessage } from '../actions/errorMessage';
+import { setNotificationMessage } from '../actions/notifMessage';
 // Import PropTypes
 import PropTypes from 'prop-types';
 
-const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
+const Blog = ({ blog }) => {
 
-  const [showDetails, setShowDetails] = useState(false);
+  const dispatch = useDispatch();
+  const showDetails = useSelector(state => state.showDetails);
+  const user = useSelector(state => state.user);
+
+
+
 
   useEffect(() => {
-    setShowDetails(false)
+    dispatch(setDetails(false));
+    // setShowDetails(false)
   }, []);
 
   const styles = {
@@ -24,7 +35,8 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
   };
 
   const handleToggleDetails = () => {
-    setShowDetails(!showDetails)
+    dispatch(toggleDetails());
+    // setShowDetails(!showDetails)
   };
 
   const handleLike = async () => {
@@ -41,28 +53,53 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
       ...blogObj,
       likes: blogObj.likes + 1
     };
-    console.log(updatedBlog)
+    // console.log(updatedBlog)
     try {
       const response = await blogService.updateLikes(blog.id, updatedBlog);
       console.log(response)
-      setBlogs(blogs.map(blog => {
-        return blog.id === response.id ? response : blog
-      }))
+      dispatch(addLike(response.id));
+      // setBlogs(blogs.map(blog => {
+      //   return blog.id === response.id ? response : blog
+      // }))
 
     } catch(e) {
-      error('Sorry unable to update blog likes value');
+      dispatch(setErrorMessage('Sorry unable to update blog likes value'));
+      // error('Sorry unable to update blog likes value');
       setTimeout(() => {
-        error(null)
+        dispatch(setErrorMessage(null));
+        // error(null)
       }, 5000)
     }
   };
 
-  const onClickDelete = async () => {
-    await handleDelete(blog.id, blog);
+  const handleDelete = async (id, blog) => {
+    if(window.confirm(`Remove ${blog.title} by ${blog.author}`)) {
+      try {
+        const response = await blogService.deleteBlog(id);
+        // console.log(response);
+        dispatch(deleteBlog(id));
+        // setBlogs(blogs.filter(blog => blog.id !== id))
+        dispatch(setNotificationMessage(`${blog.title} blog by ${blog.author} has been deleted`));
+        // setNotifMessage(`${blog.title} blog by ${blog.author} has been deleted`);
+        setTimeout(() => {
+          dispatch(setNotificationMessage(null));
+          // setNotifMessage(null)
+        }, 5000);
 
-  }
-  console.log('USER', user)
-  console.log('BLOGUSER', blog.user)
+      } catch(e) {
+        dispatch(setErrorMessage(`Sorry unable to delete ${blog.title} blog by ${blog.author}, try again`));
+        // setErrorMessage(`Sorry unable to delete ${blog.title} blog by ${blog.author}, try again`);
+        setTimeout(() => {
+          dispatch(setErrorMessage(null));
+        }, 5000);
+      }
+    } else {
+      // Do nothing.
+    }
+  };
+
+  // console.log('USER', user)
+  // console.log('BLOGUSER', blog.user)
   return (
     <div style={styles.blogItem} className="blog">
       <div style={{padding: '5px'}}>
@@ -86,7 +123,7 @@ const Blog = ({ blog, blogs, setBlogs, error, handleDelete, user }) => {
         <div style={{display: showDetails ? '' : 'none'}} className="details">
           <p>{blog.url}</p>
           <p className="likes">{`likes: ${blog.likes}`} <button onClick={handleLike} className="like-btn">like</button></p>
-          {blog.user.username === user.username && <button className="remove-btn" onClick={onClickDelete}>remove</button>}
+          {blog.user.username === user.username && <button className="remove-btn" onClick={() => handleDelete(blog.id, blog)}>remove</button>}
         </div>
       </div>
     </div>

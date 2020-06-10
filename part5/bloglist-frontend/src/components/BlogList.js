@@ -1,37 +1,47 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import AddBlog from './AddBlog';
 import Blog from './Blog';
+import { loginUser } from '../actions/user';
+import { setNotificationMessage } from '../actions/notifMessage';
+import { setVisibility } from '../actions/addBlogVisible';
 
-const BlogList = (props) => (
-  <div className="blog-list">
-    <h2>blogs</h2>
-    {/* {JSON.stringify(user.token)} */}
-    <h3>{`${props.user.name} logged in`}</h3>
-    <button onClick={props.handleLogout}>logout</button>
-    <AddBlog
-      title={props.title}
-      author={props.author}
-      url={props.url}
-      handleTitleChange={props.handleTitleChange}
-      handleAuthorChange={props.handleAuthorChange}
-      handleUrlChange={props.handleUrlChange}
-      handleCreate={props.handleCreate}
-      addBlogVisible={props.addBlogVisible}
-      show={props.show}
-      hide={props.hide}
-    />
-    {props.blogs.map(blog =>
-      <Blog
-        key={blog.id}
-        blog={blog}
-        blogs={props.blogs}
-        setBlogs={props.setBlogs}
-        error={props.error}
-        handleDelete={props.handleDelete}
-        user={props.user}
-      />
-    )}
-  </div>
-);
+const BlogList = () => {
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+  const blogs = useSelector(state => {
+    return state.blogs.sort((a, b) => b.likes - a.likes);
+  });
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('loggedBlogappUser');
+    dispatch(loginUser(null));
+    // setUser(null);
+    dispatch(setNotificationMessage('Successfully logged out'));
+    // setNotifMessage('Successfully logged out');
+    setTimeout(() => {
+      dispatch(setNotificationMessage(null))
+      // setNotifMessage(null)
+    }, 5000)
+    dispatch(setVisibility(false));
+    // setaddBlogVisible(false);
+  };
+
+  return (
+    <div className="blog-list">
+      <h2>blogs</h2>
+      {/* {JSON.stringify(user.token)} */}
+      <h3>{`${user.name} logged in`}</h3>
+      <button onClick={handleLogout}>logout</button>
+      <AddBlog />
+      {blogs.map(blog =>
+        <Blog
+          key={blog.id}
+          blog={blog}
+        />
+      )}
+    </div>
+  )
+};
 
 export default BlogList ;
