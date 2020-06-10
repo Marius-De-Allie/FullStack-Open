@@ -5,6 +5,7 @@ import errorMessage from './errorMessage';
 import notifMessage from './notifMessage';
 import addBlogVisible from './addBlogVisible';
 import showDetails from './showDetails';
+import users from './users';
 
 export default combineReducers({
     blogs,
@@ -12,6 +13,7 @@ export default combineReducers({
     errorMessage,
     notification: notifMessage,
     addBlogVisible,
-    showDetails
+    showDetails,
+    users
 });
 

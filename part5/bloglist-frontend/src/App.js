@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Switch, Route } from 'react-router-dom';
 import blogService from './services/blogs';
 import BlogList from './components/BlogList';
 import LoginForm from './components/LoginForm';
 import handleInitalBlogs, { addBlog, deleteBlog } from './actions/blogs';
 import { loginUser } from './actions/user';
+import Users from './components/Users';
 import './App.css';
 
 const App = () => {
@@ -65,7 +67,10 @@ const App = () => {
     <div>
       {errorMessage !== null && <p className="error">{errorMessage}</p>}
       {notification !== null && <p className="notification">{notification}</p>}
-      {user === null ? <LoginForm /> : <BlogList />}
+      <Switch>
+        <Route path="/" exact component={user === null ? LoginForm : BlogList} />
+        <Route path="/users" component={Users} />
+      </Switch>
     </div>
   )
 }
