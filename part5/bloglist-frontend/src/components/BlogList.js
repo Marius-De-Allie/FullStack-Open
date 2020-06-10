@@ -31,8 +31,6 @@ const BlogList = () => {
     <div className="blog-list">
       <h2>blogs</h2>
       {/* {JSON.stringify(user.token)} */}
-      <h3>{`${user.name} logged in`}</h3>
-      <button onClick={handleLogout}>logout</button>
       <AddBlog />
       {blogs.map(blog =>
         <Blog

@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Route } from 'react-router-dom';
 import blogService from './services/blogs';
-import BlogList from './components/BlogList';
-import LoginForm from './components/LoginForm';
 import handleInitalBlogs, { addBlog, deleteBlog } from './actions/blogs';
 import { loginUser } from './actions/user';
+import Home from './components/Home';
 import Users from './components/Users';
 import UserDetails from './components/UserDetails';
 import BlogDetails from './components/BlogDetails';
+import Nav from './components/Nav';
+import NotfoundPage from './components/NotfoundPage';
 import './App.css';
 
 const App = () => {
@@ -44,36 +45,17 @@ const App = () => {
     }
   }, []);
 
-
-    // try {
-    //   const response = await blogService.create(obj)
-    //   setBlogs(blogs.concat(response))
-    //   setNotifMessage(`New blog: ${response.title} added by ${response.author}!`);
-    //   setTimeout(() => {
-    //     setNotifMessage(null)
-    //   }, 5000)
-    //   // hide add blog form
-    //   setaddBlogVisible(false);
-    // } catch(e) {
-    //   console.log(e)
-    //   setErrorMessage('Unable to add blog post please try again');
-    //   setTimeout(() => {
-    //     setErrorMessage(null)
-    //   }, 5000)
-    // }
-
-  
-
-  
   return (
     <div>
+      <Nav />
       {errorMessage !== null && <p className="error">{errorMessage}</p>}
       {notification !== null && <p className="notification">{notification}</p>}
       <Switch>
-        <Route path="/" exact component={user === null ? LoginForm : BlogList} />
+        <Route path="/" exact component={Home} />
         <Route path="/users" exact component={Users} />
         <Route path="/users/:id" component={UserDetails} />
         <Route path="/blogs/:id" component={BlogDetails} />
+        <Route component={NotfoundPage} />
       </Switch>
     </div>
   )

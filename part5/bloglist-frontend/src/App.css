@@ -60,3 +60,7 @@ p.notification {
   border: 3px solid greenyellow;
   border-radius: 5px;
 }
+
+.active {
+  font-weight: bold;
+}

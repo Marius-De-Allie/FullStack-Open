@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import blogService from '../services/blogs';
 import { setDetails, toggleDetails } from '../actions/showDetails';
-import { addLike, deleteBlog } from '../actions/blogs';
+import { deleteBlog } from '../actions/blogs';
 import { setErrorMessage } from '../actions/errorMessage';
 import { setNotificationMessage } from '../actions/notifMessage';
 // Import PropTypes
