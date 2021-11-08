@@ -9,7 +9,7 @@
   "author": "Marius De Allie",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^2.14.1",
+    "apollo-server": "^2.25.3",
     "graphql": "^15.0.0",
     "uuid": "^8.1.0"
   }
